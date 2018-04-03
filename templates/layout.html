@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Google API Example</title>
+    <title>Tugas Kecil Stima</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <style>
@@ -13,37 +13,56 @@
   </head>
   <body>
     <div id="map"></div>
+    <div><h1> </h1></div>
     <textarea type="text" id="query"></textarea>
-    <button id="search">Search</button>
+    <textarea type="text" id="test"></textarea>
+    <textarea type="text" id="hai"></textarea>
+    <button id="search">Go</button>
 
-    <p><a href="" id="url" target="_blank">Click for result!</a></p>
+    <p><a href="" id="url" target="_blank" hidden>Click for result!</a></p>
     <script>
         function initMap(){
-          // Map options
+          //Settingan map awal
           var options = {
             zoom:17,
             center:{lat:-6.8909,lng:107.6105}
           }
-          // New map
+          //Membuat map baru
           var map = new google.maps.Map(document.getElementById('map'), options);
-          var points = []
-          // Listen for click on map
+          var points = [];
+          var adjacency = [];
+          var temp = [];
+          //Menunggu jika ada klik pada map
           google.maps.event.addListener(map, 'click', function(event){
-            // Add marker
-            addMarker({coords:event.latLng}, points);
+            //menambahkan marker jika diklik pada map
+            addMarker({coords:event.latLng}, points, adjacency, temp);
             document.getElementById("query").innerHTML = points;
           });
     
-          // Add Marker Function
-          function addMarker(props, list){
-            list.push(props.coords);
+          //Fungsi menambahkan marker
+          function addMarker(props, list1, list2, temp){
+            list1.push(props.coords);
             var marker = new google.maps.Marker({
               position:props.coords,
               map:map,
             });
+            //Fungsi menambahkan ketetanggaan jika marker diklik
+            marker.addListener('click', function(){
+              var x = list1.indexOf(props.coords);
+              list2.push(x);
+              document.getElementById("test").innerHTML = list2;
+            });
+            //Fungsi menjadikan tujuan jika marker di-double click
+            marker.addListener('dblclick', function(){
+              var x = list1.indexOf(props.coords);
+              temp.push(x);
+              document.getElementById("hai").innerHTML = temp;
+              return false;
+            }, false);
           }
         }
     </script>
+    <!-- Penggunaan google maps api -->
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1mfNCMMsONkubGOCkM64a1PzGDwEiNaA&callback=initMap">
     </script>
