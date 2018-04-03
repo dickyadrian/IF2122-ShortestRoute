@@ -8,10 +8,7 @@ from gmplot import gmplot
 from math import sin, cos, sqrt, atan2, radians
 app = Flask(__name__)
 
-global data
 
-search_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-details_url = "https://maps.googleapis.com/maps/api/place/details/json"
 
 def convertToArray(text):
 	points = text[0:(text.find('x'))]
@@ -95,7 +92,7 @@ def results(query):
 	for idx in hasil:
 		temp.append((data[0][idx][0], data[0][idx][1]))
 	lats,lons =zip(*temp)
-	gmap.plot(lats, lons, '#3B0B39', edge_width = 5)
+	gmap.plot(lats, lons, 'cornflowerblue', edge_width = 10)
 
 	gmap.draw("my_map.html")
 	return render_template('mode2.html')

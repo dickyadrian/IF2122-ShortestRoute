@@ -15,17 +15,17 @@
 		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
 var PolylineCoordinates = [
-new google.maps.LatLng(-6.892466, 107.608429),
-new google.maps.LatLng(-6.892615, 107.610457),
+new google.maps.LatLng(-6.892700, 107.608740),
+new google.maps.LatLng(-6.892689, 107.610414),
 ];
 
 var Path = new google.maps.Polyline({
 clickable: false,
 geodesic: true,
 path: PolylineCoordinates,
-strokeColor: "#3B0B39",
+strokeColor: "#6495ED",
 strokeOpacity: 1.000000,
-strokeWeight: 5
+strokeWeight: 10
 });
 
 Path.setMap(map);
