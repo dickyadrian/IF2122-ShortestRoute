@@ -13,62 +13,39 @@
   </head>
   <body>
     <div id="map"></div>
-    <textarea id="query" placeholder="Search for something..." hidden> bandung</textarea>
+    <textarea type="text" id="query"></textarea>
     <button id="search">Search</button>
 
     <p><a href="" id="url" target="_blank">Click for result!</a></p>
     <script>
-            function initMap(){
-              // Map options
-              var options = {
-                zoom:17,
-                center:{lat:-6.8909,lng:107.6105}
-              }
-              // New map
-              var map = new google.maps.Map(document.getElementById('map'), options);
-              var points = []
-              // Listen for click on map
-              google.maps.event.addListener(map, 'click', function(event){
-                // Add marker
-                addMarker({coords:event.latLng}, points);
-                document.getElementById("query").innerHTML = points[0];
-              });
-        
-              // Add Marker Function
-              function addMarker(props, list){
-                var marker = new google.maps.Marker({
-                  position:props.coords,
-                  map:map,
-                  //icon:props.iconImage
-                });
-        
-                // Check for customicon
-                if(props.iconImage){
-                  // Set icon image
-                  marker.setIcon(props.iconImage);
-                }
-        
-                // Check content
-                if(props.content){
-                  var infoWindow = new google.maps.InfoWindow({
-                    content:props.content
-                  });
-        
-                  marker.addListener('click', function(){
-                    infoWindow.open(map, marker);
-                  });
-                }
-                list.push(props.coords);
-                marker.addListener('dblclick', function(){
-                  var index = list.indexOf(props.coords);
-                  list.splice(index,1);
-                  marker.setMap(null);
-                })
-              }
-            }
-          </script>
-          <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1mfNCMMsONkubGOCkM64a1PzGDwEiNaA&callback=initMap">
-            </script>
+        function initMap(){
+          // Map options
+          var options = {
+            zoom:17,
+            center:{lat:-6.8909,lng:107.6105}
+          }
+          // New map
+          var map = new google.maps.Map(document.getElementById('map'), options);
+          var points = []
+          // Listen for click on map
+          google.maps.event.addListener(map, 'click', function(event){
+            // Add marker
+            addMarker({coords:event.latLng}, points);
+            document.getElementById("query").innerHTML = points;
+          });
+    
+          // Add Marker Function
+          function addMarker(props, list){
+            list.push(props.coords);
+            var marker = new google.maps.Marker({
+              position:props.coords,
+              map:map,
+            });
+          }
+        }
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1mfNCMMsONkubGOCkM64a1PzGDwEiNaA&callback=initMap">
+    </script>
   </body>
 </html>
