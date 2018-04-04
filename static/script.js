@@ -1,7 +1,7 @@
 $(document).ready(function() {
   
     $("#search").click(function() {
-      var searchReq = $.get("/sendRequest/" + $("#query").val()+ "x" + $("#test").val() + "y" + $("#hai").val());
+      var searchReq = $.get("/sendRequest/" + $("#points").val()+ "x" + $("#adjacency").val() + "y" + $("#startEndPoint").val());
       
     });
   

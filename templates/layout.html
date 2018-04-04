@@ -3,21 +3,46 @@
   <head>
     <title>Tugas Kecil Stima</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="../static/script.js"></script>
     <style>
+            h1{
+              font-family: 'Courier New', Courier, monospace;
+              font-size: 30px;
+              margin:auto;
+              text-align:center;
+            }
+
             #map{
               height:800px;
-              width:500px;
+              width:90%;
+              margin-top: 10px;
+              margin-left: 5%;
+              margin-right: 5%;
+              margin-bottom: 10px;
+            }
+
+            #input{
+              margin-left:auto;
+              margin-right:auto;
+              text-align:center;
+            }
+
+            #search{
+              height: 50px;
+              width:100px;
             }
     </style>
   </head>
   <body>
+    <h1>PENCARIAN LINTASAN TERPENDEK DENGAN MENGGUNAKAN ALGORITMA A*</h1>
     <div id="map"></div>
     <div><h1> </h1></div>
-    <textarea type="text" id="query"></textarea>
-    <textarea type="text" id="test"></textarea>
-    <textarea type="text" id="hai"></textarea>
-    <button id="search">Go</button>
+    <div id="input">
+      <textarea type="text" id="points"></textarea>
+      <textarea type="text" id="adjacency"></textarea>
+      <textarea type="text" id="startEndPoint"></textarea>
+      <div><button id="search">Calculate</button></div>
+    </div>
 
     <p><a href="" id="url" target="_blank" hidden>Click for result!</a></p>
     <script>
@@ -32,11 +57,14 @@
           var points = [];
           var adjacency = [];
           var temp = [];
+          var lineCoor = [[0,0],[0,0]];
+          var createLine = false;
+
           //Menunggu jika ada klik pada map
           google.maps.event.addListener(map, 'click', function(event){
             //menambahkan marker jika diklik pada map
             addMarker({coords:event.latLng}, points, adjacency, temp);
-            document.getElementById("query").innerHTML = points;
+            document.getElementById("points").innerHTML = points;
           });
     
           //Fungsi menambahkan marker
@@ -44,19 +72,45 @@
             list1.push(props.coords);
             var marker = new google.maps.Marker({
               position:props.coords,
+              label:list1.indexOf(props.coords).toString(),
               map:map,
             });
             //Fungsi menambahkan ketetanggaan jika marker diklik
             marker.addListener('click', function(){
+              console.log(list1.indexOf(props.coords));
               var x = list1.indexOf(props.coords);
               list2.push(x);
-              document.getElementById("test").innerHTML = list2;
+
+              //Gambarkan garis lurus pada kedua simpul yang bertetangga
+              if(createLine){
+                lineCoor[1][0] = props.coords.lat();
+                lineCoor[1][1] = props.coords.lng();
+                console.log("Added dest : ", lineCoor[1][0], lineCoor[1][1]);
+                var line = new google.maps.Polyline({
+                    path: [
+                        new google.maps.LatLng(lineCoor[0][0], lineCoor[0][1]), 
+                        new google.maps.LatLng(lineCoor[1][0], lineCoor[1][1])
+                    ],
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 5,
+                    map: map
+                });
+              }else{
+                lineCoor[0][0] = props.coords.lat();
+                lineCoor[0][1] = props.coords.lng();
+                console.log("Added src : ", lineCoor[0][0], lineCoor[0][1]);
+              }
+
+              document.getElementById("adjacency").innerHTML = list2;
+              createLine = !createLine;
             });
             //Fungsi menjadikan tujuan jika marker di-double click
             marker.addListener('dblclick', function(){
               var x = list1.indexOf(props.coords);
               temp.push(x);
-              document.getElementById("hai").innerHTML = temp;
+              document.getElementById("startEndPoint").innerHTML = temp;
+              createLine = false;
               return false;
             }, false);
           }
